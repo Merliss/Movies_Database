@@ -1,15 +1,10 @@
 ﻿namespace Movies_Database.Entities
 {
-    public class Country
+    public class Roles
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
 
-        public List<Movie> Movies { get; set; }
-
-
-
-
+        public List<Users> Users { get; set; };
     }
 }

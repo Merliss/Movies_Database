@@ -18,8 +18,8 @@
         public virtual Country Country { get; set; }
         public virtual Genre Genre { get; set; }
 
-        public virtual MovieRating MovieRating { get; set; }
-
+        
+        public virtual List<MovieRating> MovieRatings { get; set; }
 
 
     }
