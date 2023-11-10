@@ -35,7 +35,7 @@ namespace Movies_Database.Entities
 
             modelBuilder.Entity<Movie>()
                 .Property(x => x.Description)
-                .HasMaxLength(150);
+                .HasMaxLength(250);
 
             modelBuilder.Entity<Movie>()
                 .Property(x => x.Year)
@@ -46,7 +46,7 @@ namespace Movies_Database.Entities
 
             modelBuilder.Entity<Genre>()
                 .Property(x => x.Name)
-                .HasMaxLength(20)
+                .HasMaxLength(35)
                 .IsRequired();
 
             modelBuilder.Entity<Country>()
@@ -67,6 +67,8 @@ namespace Movies_Database.Entities
             modelBuilder.Entity<Director>()
                 .Property(x => x.Surname)
                 .IsRequired();
+
+
 
             modelBuilder.Entity<MovieRating>()
                 .HasKey(x => new { x.Id });
@@ -103,6 +105,8 @@ namespace Movies_Database.Entities
                 .Property(x => x.PasswordHash)
                 .HasMaxLength(255)
                 .IsRequired();
+
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -11,7 +11,7 @@
         public int CountryId { get; set; }
         public int GenreId { get; set; }
 
-        public int MovieRatingId { get; set; }
+        
 
         public virtual Director Director { get; set; }
 
