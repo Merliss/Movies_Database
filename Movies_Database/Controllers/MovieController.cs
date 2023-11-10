@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Movies_Database.Entities;
 using Movies_Database.Models;
 
@@ -9,10 +11,12 @@ namespace Movies_Database.Controllers
     public class MovieController : Controller
     {
         private readonly MovieDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public MovieController(MovieDbContext dbContext)
+        public MovieController(MovieDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -20,8 +24,15 @@ namespace Movies_Database.Controllers
         {
             var movies = _dbContext
                 .Movies
+                .Include(m => m.Director)
+                .Include(m => m.Country)
+                .Include(m => m.Genre)
+                .Include(m => m.MovieRatings)
                 .ToList();
-            return Ok(movies);
+            
+            var moviesDtos = _mapper.Map<List<MovieDto>>(movies);
+
+            return Ok(moviesDtos);
         }
 
 
@@ -30,6 +41,10 @@ namespace Movies_Database.Controllers
         {
             var movie = _dbContext
                 .Movies
+                .Include(m => m.Director)
+                .Include(m => m.Country)
+                .Include(m => m.Genre)
+                .Include(m => m.MovieRatings)
                 .FirstOrDefault(x => x.Id == id);
 
             if (movie == null)
@@ -37,7 +52,8 @@ namespace Movies_Database.Controllers
                 return NotFound();
             }
 
-            return movie;
+            var movieDto = _mapper.Map<MovieDto>(movie);
+            return Ok(movieDto);
         }
     }
 }
