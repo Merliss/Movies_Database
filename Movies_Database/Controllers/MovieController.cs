@@ -55,5 +55,46 @@ namespace Movies_Database.Controllers
             var movieDto = _mapper.Map<MovieDto>(movie);
             return Ok(movieDto);
         }
+
+        [HttpPost]
+        public ActionResult CreateMovie([FromBody] CreateMovieDto dto)
+        {
+            var movie = _mapper.Map<Movie>(dto);
+            var genreName = movie.Genre.Name;
+            var countryName = movie.Country.Name;
+            var directorSurname = movie.Director.Surname;
+            var directorName = movie.Director.Name;
+            var existingGenre = _dbContext.Genres.FirstOrDefault(g => g.Name == genreName);
+            var existingCountry = _dbContext.Countries.FirstOrDefault(g => g.Name == countryName);
+            var existingDirector = _dbContext.Directors.FirstOrDefault(g => g.Name == directorName && g.Surname == directorSurname);
+            
+            
+
+
+            if (existingGenre != null)
+            {
+                movie.Genre = existingGenre;
+            }
+
+            if (existingCountry != null)
+            {
+                movie.Country = existingCountry;
+            }
+
+            if (existingDirector != null)
+            {
+                movie.Director = existingDirector;
+            }
+
+
+
+            _dbContext.Movies.Add(movie);
+
+            _dbContext.SaveChanges();
+
+            return Created($"/api/movie/{movie.Id}", null);
+
+        }
+
     }
 }
