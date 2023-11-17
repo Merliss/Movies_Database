@@ -59,6 +59,11 @@ namespace Movies_Database.Controllers
         [HttpPost]
         public ActionResult CreateMovie([FromBody] CreateMovieDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var movie = _mapper.Map<Movie>(dto);
             var genreName = movie.Genre.Name;
             var countryName = movie.Country.Name;
@@ -68,8 +73,12 @@ namespace Movies_Database.Controllers
             var existingCountry = _dbContext.Countries.FirstOrDefault(g => g.Name == countryName);
             var existingDirector = _dbContext.Directors.FirstOrDefault(g => g.Name == directorName && g.Surname == directorSurname);
             
-            
+            var existingMovie = _dbContext.Movies.FirstOrDefault(g => g.Name == movie.Name);
 
+            if (existingMovie != null)
+            {
+                return BadRequest("Movie exist");
+            }
 
             if (existingGenre != null)
             {
