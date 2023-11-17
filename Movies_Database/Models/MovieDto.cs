@@ -15,7 +15,7 @@
 
         public string Genre { get; set; }
 
-        public List<MovieDto> MovieRatings { get; set;}
+        public List<MovieRatingDto> MovieRatings { get; set;}
         
     }
 }
