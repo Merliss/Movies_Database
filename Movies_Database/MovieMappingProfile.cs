@@ -14,8 +14,11 @@ namespace Movies_Database
                 .ForMember(m => m.Country, c => c.MapFrom(s => s.Country.Name))
                 .ForMember(m => m.Genre, c => c.MapFrom(s => s.Genre.Name));
 
-            CreateMap<MovieRating, MovieRatingDto>();
+            CreateMap<MovieRating, MovieRatingDto>()
+                .ForMember(m => m.MovieName, c => c.MapFrom(s => s.Movie.Name))
+                .ForMember(m => m.UserName, c => c.MapFrom(s => s.Users.Username));
 
+            CreateMap<Users, UserDto>();
 
             CreateMap<CreateMovieDto, Movie>()
                 .ForMember(m => m.Director, c => c.MapFrom(dto => new Director() { Name = dto.DirectorName, Surname = dto.DirectorSurname }))
