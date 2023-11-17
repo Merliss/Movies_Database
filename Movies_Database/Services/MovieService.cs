@@ -90,14 +90,14 @@ namespace Movies_Database.Services
 
             if (existingMovie != null)
             {
-                _dbContext.Movies.Add(movie);
-
-                _dbContext.SaveChanges();
-
-                return movie.Id;
+                return -1;
             }
 
-            return -1;
+            _dbContext.Movies.Add(movie);
+
+            _dbContext.SaveChanges();
+
+            return movie.Id;
         }
 
     }

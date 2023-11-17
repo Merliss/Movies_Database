@@ -49,7 +49,7 @@ namespace Movies_Database.Controllers
            
             if (id == -1)
             {
-                return BadRequest(dto);
+                return BadRequest(dto.Name);
             }
 
 
