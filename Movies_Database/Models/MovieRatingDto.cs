@@ -8,5 +8,9 @@
         public int Rating { get; set; }
 
         public bool IsFavorite { get; set; }
+
+        public string MovieName {  get; set; }
+
+        public string UserName { get; set; }
     }
 }
