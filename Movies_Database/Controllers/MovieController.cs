@@ -47,6 +47,7 @@ namespace Movies_Database.Controllers
         {
             if (!ModelState.IsValid)
             {
+                
                 return BadRequest(ModelState);
             }
 

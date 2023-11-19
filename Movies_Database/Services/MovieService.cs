@@ -17,10 +17,12 @@ namespace Movies_Database.Services
     {
         private readonly MovieDbContext _dbContext;
         private readonly IMapper _mapper;
-        public MovieService(MovieDbContext dbContext, IMapper mapper)
+        private readonly ILogger<MovieService> _logger;
+        public MovieService(MovieDbContext dbContext, IMapper mapper, ILogger<MovieService> logger)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public MovieDto GetMovieById (int id)
@@ -107,6 +109,7 @@ namespace Movies_Database.Services
 
             if (movie == null)
             {
+                _logger.LogError($"Movie with id: {id} can't be updated. Reason: don't exist");
                 return false;
             }
 

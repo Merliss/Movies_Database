@@ -1,5 +1,7 @@
 using Movies_Database;
 using Movies_Database.Entities;
+using Movies_Database.Services;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +12,12 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<MovieDbContext>();
 builder.Services.AddScoped<MovieSeeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<IMovieService,MovieService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Host.UseNLog();
+
 
 var app = builder.Build();
 var scope = app.Services.CreateScope();
