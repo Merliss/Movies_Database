@@ -64,5 +64,27 @@ namespace Movies_Database.Controllers
 
         }
 
+        [HttpPut("{id}")]
+        public ActionResult UpdateMovie([FromBody] UpdateMovieDto dto, [FromRoute] int id)
+
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var isUpdated = _movieService.Update(dto,id);
+
+            if(isUpdated == false)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+
+           
+
+        }
+
     }
 }

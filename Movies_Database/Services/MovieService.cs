@@ -11,6 +11,7 @@ namespace Movies_Database.Services
         MovieDto GetMovieById(int id);
         IEnumerable<MovieDto> GetAllMovies();
         int Create(CreateMovieDto dto);
+        bool Update(UpdateMovieDto dto, int id);
     }
     public class MovieService : IMovieService
     {
@@ -99,6 +100,25 @@ namespace Movies_Database.Services
 
             return movie.Id;
         }
+
+        public bool Update(UpdateMovieDto dto, int id)
+        {
+            var movie = _dbContext.Movies.FirstOrDefault(x => x.Id == id);
+
+            if (movie == null)
+            {
+                return false;
+            }
+
+            movie.Name = dto.Name;
+            movie.Description = dto.Description;
+            movie.Year = dto.Year;
+
+            
+            _dbContext.SaveChanges();
+            return true; ;
+        }
+
 
     }
 }
