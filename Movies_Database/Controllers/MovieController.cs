@@ -45,6 +45,12 @@ namespace Movies_Database.Controllers
         [HttpPost]
         public ActionResult CreateMovie([FromBody] CreateMovieDto dto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
             var id = _movieService.Create(dto);
            
             if (id == -1)
