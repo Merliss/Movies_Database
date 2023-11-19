@@ -25,6 +25,7 @@ namespace Movies_Database
                 .ForMember(m => m.Genre, c => c.MapFrom(dto => new Genre() { Name = dto.Genre }))
                 .ForMember(m => m.Country, c => c.MapFrom(dto => new Country() { Name = dto.Country}));
 
+            CreateMap<CreateMovieDto, Movie>();
         }       
 
 
