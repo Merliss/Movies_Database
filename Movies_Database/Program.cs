@@ -1,5 +1,6 @@
 using Movies_Database;
 using Movies_Database.Entities;
+using Movies_Database.Middleware;
 using Movies_Database.Services;
 using NLog.Web;
 
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<MovieDbContext>();
 builder.Services.AddScoped<MovieSeeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IMovieService,MovieService>();
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,6 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();
 
