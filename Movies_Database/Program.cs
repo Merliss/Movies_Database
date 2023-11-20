@@ -1,6 +1,11 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Identity;
 using Movies_Database;
 using Movies_Database.Entities;
 using Movies_Database.Middleware;
+using Movies_Database.Models;
+using Movies_Database.Models.Validators;
 using Movies_Database.Services;
 using NLog.Web;
 
@@ -14,9 +19,12 @@ builder.Services.AddDbContext<MovieDbContext>();
 builder.Services.AddScoped<MovieSeeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IMovieService,MovieService>();
+builder.Services.AddScoped<IAccountService,AccountService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
-
+builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
+builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Host.UseNLog();

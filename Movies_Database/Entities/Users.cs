@@ -9,6 +9,8 @@
 
         public int RoleId { get; set; }
 
+        public string Email { get; set; }
+
         public virtual Roles Role { get; set; }
 
         public List<MovieRating> MovieRatings { get; set; }

@@ -106,6 +106,10 @@ namespace Movies_Database.Entities
                 .HasMaxLength(255)
                 .IsRequired();
 
+            modelBuilder.Entity<Users>()
+                .Property(x => x.Email)
+                .IsRequired();
+
 
         }
 

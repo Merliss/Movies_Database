@@ -26,6 +26,8 @@ namespace Movies_Database
                 .ForMember(m => m.Country, c => c.MapFrom(dto => new Country() { Name = dto.Country}));
 
             CreateMap<CreateMovieDto, Movie>();
+
+            CreateMap<RegisterUserDto, UserDto>();
         }       
 
 
