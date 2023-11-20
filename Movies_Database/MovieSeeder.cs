@@ -25,9 +25,35 @@ namespace Movies_Database
                     _dbContext.Movies.AddRange(movies);
                     _dbContext.SaveChanges();
                 }
+
+                if (!_dbContext.Roles.Any())
+                {
+                    var roles = GetRoles();
+                    _dbContext.Roles.AddRange(roles);
+                    _dbContext.SaveChanges();
+                }
             }
         }
 
+        private IEnumerable<Roles> GetRoles()
+        {
+            var roles = new List<Roles>()
+            {
+                new Roles()
+                {
+                   Name = "Admin"
+                },
+                new Roles()
+                {
+                    Name = "User"
+                },
+                new Roles()
+                {
+                    Name = "Moderator"
+                }
+            };
+            return roles;
+        }
 
         IEnumerable<Movie> GetMovies()
         {
