@@ -1,4 +1,6 @@
-﻿namespace Movies_Database.Middleware
+﻿using Movies_Database.Exceptions;
+
+namespace Movies_Database.Middleware
 {
     public class ErrorHandlingMiddleware : IMiddleware
     {
@@ -13,6 +15,11 @@
             {
                 await next.Invoke(context);
             }
+            catch (NotFoundException NotFoundEx)
+            {
+                context.Response.StatusCode = 404;
+                await context.Response.WriteAsync(NotFoundEx.Message);
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
@@ -20,6 +27,7 @@
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsync("Something went wrong");
             }
+            
         
         }
 

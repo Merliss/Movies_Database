@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Movies_Database.Entities;
+using Movies_Database.Exceptions;
 using Movies_Database.Models;
 
 namespace Movies_Database.Services
@@ -11,7 +12,7 @@ namespace Movies_Database.Services
         MovieDto GetMovieById(int id);
         IEnumerable<MovieDto> GetAllMovies();
         int Create(CreateMovieDto dto);
-        bool Update(UpdateMovieDto dto, int id);
+        void Update(UpdateMovieDto dto, int id);
     }
     public class MovieService : IMovieService
     {
@@ -37,7 +38,8 @@ namespace Movies_Database.Services
 
             if(movie == null)
             {
-                return null;
+                _logger.LogError($"Movie with id: {id} can't be found. Reason: not exist");
+                throw new NotFoundException($"Movie with id: {id} not found");
             }
 
             var result = _mapper.Map<MovieDto>(movie);
@@ -103,14 +105,14 @@ namespace Movies_Database.Services
             return movie.Id;
         }
 
-        public bool Update(UpdateMovieDto dto, int id)
+        public void Update(UpdateMovieDto dto, int id)
         {
             var movie = _dbContext.Movies.FirstOrDefault(x => x.Id == id);
 
             if (movie == null)
             {
-                _logger.LogError($"Movie with id: {id} can't be updated. Reason: don't exist");
-                return false;
+                _logger.LogError($"Movie with id: {id} can't be updated. Reason: not exist");
+                throw new NotFoundException($"Movie with id: {id} not found");
             }
 
             movie.Name = dto.Name;
@@ -119,7 +121,7 @@ namespace Movies_Database.Services
 
             
             _dbContext.SaveChanges();
-            return true; ;
+            
         }
 
 

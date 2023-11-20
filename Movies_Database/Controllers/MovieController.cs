@@ -9,6 +9,7 @@ namespace Movies_Database.Controllers
 {
 
     [Route("api/movie")]
+    [ApiController]
     public class MovieController : Controller
     {
         private readonly IMovieService _movieService;
@@ -33,10 +34,6 @@ namespace Movies_Database.Controllers
         {
             var movieDto = _movieService.GetMovieById(id);
 
-            if (movieDto == null)
-            {
-                return NotFound();
-            }
 
             
             return Ok(movieDto);
@@ -45,13 +42,7 @@ namespace Movies_Database.Controllers
         [HttpPost]
         public ActionResult CreateMovie([FromBody] CreateMovieDto dto)
         {
-            if (!ModelState.IsValid)
-            {
-                
-                return BadRequest(ModelState);
-            }
-
-
+            
             var id = _movieService.Create(dto);
            
             if (id == -1)
@@ -69,21 +60,10 @@ namespace Movies_Database.Controllers
         public ActionResult UpdateMovie([FromBody] UpdateMovieDto dto, [FromRoute] int id)
 
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var isUpdated = _movieService.Update(dto,id);
-
-            if(isUpdated == false)
-            {
-                return NotFound();
-            }
+            
+            _movieService.Update(dto, id);
 
             return Ok();
-
-           
 
         }
 
