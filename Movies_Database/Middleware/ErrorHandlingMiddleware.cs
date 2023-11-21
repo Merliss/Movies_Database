@@ -15,6 +15,11 @@ namespace Movies_Database.Middleware
             {
                 await next.Invoke(context);
             }
+            catch (BadRequestException badRequesEx)
+            {
+                context.Response.StatusCode = 400;
+                await context.Response.WriteAsync(badRequesEx.Message);
+            }
             catch (NotFoundException NotFoundEx)
             {
                 context.Response.StatusCode = 404;
