@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movies_Database.Entities;
@@ -10,6 +11,7 @@ namespace Movies_Database.Controllers
 
     [Route("api/movie")]
     [ApiController]
+    [Authorize]
     public class MovieController : Controller
     {
         private readonly IMovieService _movieService;
@@ -30,6 +32,7 @@ namespace Movies_Database.Controllers
 
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public ActionResult<MovieDto> Get([FromRoute] int id)
         {
             var movieDto = _movieService.GetMovieById(id);
@@ -40,6 +43,7 @@ namespace Movies_Database.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult CreateMovie([FromBody] CreateMovieDto dto)
         {
             
@@ -57,6 +61,7 @@ namespace Movies_Database.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,Moderator")]
         public ActionResult UpdateMovie([FromBody] UpdateMovieDto dto, [FromRoute] int id)
 
         {
