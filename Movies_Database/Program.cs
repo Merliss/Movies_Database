@@ -27,6 +27,7 @@ builder.Services.AddDbContext<MovieDbContext>();
 builder.Services.AddScoped<MovieSeeder>();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IMovieService,MovieService>();
+builder.Services.AddScoped<IMovieRatingService,MovieRatingService>();
 builder.Services.AddScoped<IAccountService,AccountService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();

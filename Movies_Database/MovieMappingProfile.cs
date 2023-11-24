@@ -28,6 +28,8 @@ namespace Movies_Database
             CreateMap<CreateMovieDto, Movie>();
 
             CreateMap<RegisterUserDto, UserDto>();
+
+            CreateMap<CreateMovieRatingDto, MovieRating>();
         }       
 
 

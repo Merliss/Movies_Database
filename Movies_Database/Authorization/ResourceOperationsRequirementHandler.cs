@@ -16,7 +16,7 @@ namespace Movies_Database.Authorization
             }
 
            var userId = context.User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            if (movieRating.UserId == int.Parse(userId))
+            if (movieRating.UsersId == int.Parse(userId))
             {
                 context.Succeed(requirement);
             }
