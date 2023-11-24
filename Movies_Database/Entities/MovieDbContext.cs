@@ -78,7 +78,7 @@ namespace Movies_Database.Entities
                 .IsRequired();
 
             modelBuilder.Entity<MovieRating>()
-                .Property(x => x.UserId)
+                .Property(x => x.UsersId)
                 .IsRequired();
 
             modelBuilder.Entity<MovieRating>()
