@@ -11,7 +11,7 @@
         
         public int MovieId { get; set; }
 
-        public int UserId { get; set; }
+        public int UsersId { get; set; }
 
 
         public virtual Movie Movie { get; set; }
