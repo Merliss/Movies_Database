@@ -3,7 +3,7 @@ using Movies_Database.Entities;
 
 namespace Movies_Database.Models.Validators
 {
-    public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
+    public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto> //FluentValidation
     {
         public RegisterUserDtoValidator(MovieDbContext dbContext)
         {
@@ -16,7 +16,7 @@ namespace Movies_Database.Models.Validators
 
             RuleFor(x => x.ConfirmPassword)
                 .Equal(p => p.Password);
-            
+                
 
 
             RuleFor(x => x.Email)
@@ -29,7 +29,7 @@ namespace Movies_Database.Models.Validators
                     var emailExist = dbContext.Users.Any(x => x.Email == value);
                     if (emailExist)
                     {
-                        context.AddFailure("Email already exist");
+                        context.AddFailure("Email already exist"); //dodać takie sprawdzenia do reszty encji
                     }
                 });
 
