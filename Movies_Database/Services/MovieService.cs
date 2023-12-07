@@ -74,6 +74,7 @@ namespace Movies_Database.Services
 
                 baseQuery = query.SortOrder == SortOrder.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);
             }
+            
 
             var movies = baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))

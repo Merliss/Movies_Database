@@ -21,8 +21,9 @@ namespace Movies_Database.Models.Validators
                 }
             });
 
-            RuleFor(r => r.SortBy).Must(value => string.IsNullOrEmpty(value)|| allowedSortByColumnNames.Contains(value))
-                .WithMessage($"Sort is optional or must be in [{string.Join(",",allowedSortByColumnNames)}]");
+            RuleFor(r => r.SortBy)
+                .Must(value => string.IsNullOrEmpty(value) || allowedSortByColumnNames.Contains(value))
+                .WithMessage($"Sort is optional or must be in [{string.Join(",", allowedSortByColumnNames)}]");
         }
 
     }
