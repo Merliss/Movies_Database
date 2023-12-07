@@ -1,7 +1,10 @@
-﻿using System.Xml;
+﻿using System.Security.Claims;
+using System.Xml;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Movies_Database.Authorization;
 using Movies_Database.Entities;
 using Movies_Database.Exceptions;
 using Movies_Database.Models;
@@ -22,14 +25,17 @@ namespace Movies_Database.Services
         private readonly IMapper _mapper;
         private readonly ILogger<MovieRatingService> _logger;
         private readonly IUserContextService _userContextService;
+        private readonly IAuthorizationService _authorizationService;
 
-        public MovieRatingService(MovieDbContext dbContext, IMapper mapper, ILogger<MovieRatingService> logger, IUserContextService userContextService)
+        public MovieRatingService(MovieDbContext dbContext, IMapper mapper, ILogger<MovieRatingService> logger, IUserContextService userContextService, IAuthorizationService authorizationService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _logger = logger;
             _userContextService = userContextService;
+            _authorizationService = authorizationService;
         }
+
 
         public IEnumerable<MovieRatingDto> GetAllByMovie(int movieId)
         {
@@ -74,13 +80,22 @@ namespace Movies_Database.Services
 
         public int Update(CreateMovieRatingDto dto)
         {
+
+
             var rating = _mapper.Map<MovieRating>(dto);
             rating.UsersId = (int)_userContextService.GetUserId;
             rating.MovieId = _dbContext.Movies.FirstOrDefault(m => m.Name == dto.MovieName).Id;
             var UserId = rating.UsersId;
             var MovieIdFromRating = rating.MovieId;
-
             var existingRating = _dbContext.MovieRatings.FirstOrDefault(r => r.UsersId == UserId && r.MovieId == MovieIdFromRating);
+
+            var authoriztionResult = _authorizationService.AuthorizeAsync(_userContextService.User, existingRating, new ResourceOperationsRequirement(ResourceOperation.Update)).Result;
+           
+            if (!authoriztionResult.Succeeded)
+            {
+                throw new ForbidException();
+            }
+
 
 
 
