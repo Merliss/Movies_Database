@@ -10,7 +10,7 @@ namespace Movies_Database.Services
     public interface IMovieService
     {
         MovieDto GetMovieById(int id);
-        IEnumerable<MovieDto> GetAllMovies(MovieQuery query);
+        PagedResult<MovieDto> GetAllMovies(MovieQuery query);
         int Create(CreateMovieDto dto);
         void Update(UpdateMovieDto dto, int id);
     }
@@ -47,15 +47,17 @@ namespace Movies_Database.Services
             return result;
         }
 
-        public IEnumerable<MovieDto> GetAllMovies(MovieQuery query)
+        public PagedResult<MovieDto> GetAllMovies(MovieQuery query)
         {
-            var movies = _dbContext
+            var baseQuery = _dbContext
                 .Movies
                 .Include(m => m.Director)
                 .Include(m => m.Country)
                 .Include(m => m.Genre)
                 .Include(m => m.MovieRatings)
-                .Where(m => query.SearchPhrase == null || ( m.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || m.Description.ToLower().Contains(query.SearchPhrase.ToLower())))
+                .Where(m => query.SearchPhrase == null || (m.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || m.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+            var movies = baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
                 .Take(query.PageSize)
                 .ToList();
@@ -63,8 +65,10 @@ namespace Movies_Database.Services
             
 
             var moviesDtos = _mapper.Map<List<MovieDto>>(movies);
+    
+            var result = new PagedResult<MovieDto>(moviesDtos, baseQuery.Count(), query.PageSize, query.PageNumber);
 
-            return moviesDtos;
+            return result;
         }
 
         public int Create(CreateMovieDto dto)

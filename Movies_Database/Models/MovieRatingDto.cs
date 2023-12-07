@@ -1,4 +1,6 @@
-﻿namespace Movies_Database.Models
+﻿using Movies_Database.Entities;
+
+namespace Movies_Database.Models
 {
     public class MovieRatingDto
     {
@@ -11,6 +13,9 @@
 
         public string MovieName {  get; set; }
 
-        public string UserName { get; set; }
+        public int UsersId { get; set; }
+
+        
+        
     }
 }
