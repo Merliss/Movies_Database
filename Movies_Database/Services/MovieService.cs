@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Movies_Database.Entities;
 using Movies_Database.Exceptions;
@@ -56,6 +57,23 @@ namespace Movies_Database.Services
                 .Include(m => m.Genre)
                 .Include(m => m.MovieRatings)
                 .Where(m => query.SearchPhrase == null || (m.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || m.Description.ToLower().Contains(query.SearchPhrase.ToLower())));
+
+
+            if (!string.IsNullOrEmpty(query.SortBy))
+            {
+                var columnsSelectors = new Dictionary<string, Expression<Func<Movie, object>>>
+                {
+                    {nameof(Movie.Name), x => x.Name },
+                    {nameof(Movie.Genre), x => x.Genre },
+                    {nameof(Movie.Year), x => x.Year },
+                    {nameof(Movie.Country), x => x.Country },
+                    {nameof(Movie.Director), x => x.Director }
+                };
+
+                var selectedColumn = columnsSelectors[query.SortBy];
+
+                baseQuery = query.SortOrder == SortOrder.ASC ? baseQuery.OrderBy(selectedColumn) : baseQuery.OrderByDescending(selectedColumn);
+            }
 
             var movies = baseQuery
                 .Skip(query.PageSize * (query.PageNumber - 1))
