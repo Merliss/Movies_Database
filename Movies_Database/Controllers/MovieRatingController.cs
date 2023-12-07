@@ -28,7 +28,7 @@ namespace Movies_Database.Controllers
             return Ok(ratings);
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         
         public ActionResult CreateMovieRating([FromBody] CreateMovieRatingDto dto)
         {
@@ -47,7 +47,7 @@ namespace Movies_Database.Controllers
         }
 
 
-        [HttpPost("update")]
+        [HttpPut]
         public ActionResult UpdateMovieRating([FromBody] CreateMovieRatingDto dto)
         {
             var id = _movieRatingService.Update(dto);
