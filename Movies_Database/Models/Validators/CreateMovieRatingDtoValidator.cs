@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Movies_Database.Entities;
 
 namespace Movies_Database.Models.Validators
 {
@@ -9,7 +10,7 @@ namespace Movies_Database.Models.Validators
     public class CreateMovieRatingDtoValidator : AbstractValidator<CreateMovieRatingDto>
     {
 
-        public CreateMovieRatingDtoValidator(DbContext dbContext)
+        public CreateMovieRatingDtoValidator(MovieDbContext dbContext)
         {
 
 
