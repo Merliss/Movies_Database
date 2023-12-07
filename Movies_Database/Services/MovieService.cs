@@ -10,7 +10,7 @@ namespace Movies_Database.Services
     public interface IMovieService
     {
         MovieDto GetMovieById(int id);
-        IEnumerable<MovieDto> GetAllMovies(string searchPhrase);
+        IEnumerable<MovieDto> GetAllMovies(MovieQuery query);
         int Create(CreateMovieDto dto);
         void Update(UpdateMovieDto dto, int id);
     }
@@ -47,7 +47,7 @@ namespace Movies_Database.Services
             return result;
         }
 
-        public IEnumerable<MovieDto> GetAllMovies(string searchPhrase)
+        public IEnumerable<MovieDto> GetAllMovies(MovieQuery query)
         {
             var movies = _dbContext
                 .Movies
@@ -55,7 +55,9 @@ namespace Movies_Database.Services
                 .Include(m => m.Country)
                 .Include(m => m.Genre)
                 .Include(m => m.MovieRatings)
-                .Where(m => searchPhrase == null || (m.Name.ToLower().Contains(searchPhrase) || m.Description.ToLower().Contains(searchPhrase)))
+                .Where(m => query.SearchPhrase == null || ( m.Name.ToLower().Contains(query.SearchPhrase.ToLower()) || m.Description.ToLower().Contains(query.SearchPhrase.ToLower())))
+                .Skip(query.PageSize * (query.PageNumber - 1))
+                .Take(query.PageSize)
                 .ToList();
 
             

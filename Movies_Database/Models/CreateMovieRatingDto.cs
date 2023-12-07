@@ -15,6 +15,7 @@ namespace Movies_Database.Models
         [Required]
         public string MovieName { get; set; }
 
+        public int UsersId { get; set; }
         
 
     }

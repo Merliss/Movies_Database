@@ -23,9 +23,9 @@ namespace Movies_Database.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<MovieDto>> GetAll([FromQuery]string searchPhrase)
+        public ActionResult<IEnumerable<MovieDto>> GetAll([FromQuery]MovieQuery query)
         {
-            var moviesDtos = _movieService.GetAllMovies(searchPhrase);
+            var moviesDtos = _movieService.GetAllMovies(query);
 
             return Ok(moviesDtos);
         }
