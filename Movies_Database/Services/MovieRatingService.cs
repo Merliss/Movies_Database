@@ -11,19 +11,23 @@ namespace Movies_Database.Services
     public interface IMovieRatingService
     {
         IEnumerable<MovieRatingDto> GetAllByMovie(int movieId);
-        int Create(CreateMovieRatingDto ratingDto, int UserId);
+        int Create(CreateMovieRatingDto ratingDto);
+
+        int Update(CreateMovieRatingDto dto);
     }
     public class MovieRatingService : IMovieRatingService
     {
         private readonly MovieDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly ILogger<MovieRatingService> _logger;
+        private readonly IUserContextService _userContextService;
 
-        public MovieRatingService(MovieDbContext dbContext, IMapper mapper, ILogger<MovieRatingService> logger)
+        public MovieRatingService(MovieDbContext dbContext, IMapper mapper, ILogger<MovieRatingService> logger, IUserContextService userContextService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _logger = logger;
+            _userContextService = userContextService;
         }
 
         public IEnumerable<MovieRatingDto> GetAllByMovie(int movieId)
@@ -41,15 +45,15 @@ namespace Movies_Database.Services
 
         }
 
-        public int Create(CreateMovieRatingDto dto, int UserIdCreating)
+        public int Create(CreateMovieRatingDto dto)
         {
             var rating = _mapper.Map<MovieRating>(dto);
-            rating.UsersId = UserIdCreating;
+            rating.UsersId = (int)_userContextService.GetUserId;
             rating.MovieId = _dbContext.Movies.FirstOrDefault(m => m.Name == dto.MovieName).Id;
             var UserId = rating.UsersId;
-            var MovieRatingId = rating.MovieId;
+            var MovieIdFromRating = rating.MovieId;
 
-            var existingRating = _dbContext.MovieRatings.FirstOrDefault(r => r.UsersId == UserId && r.MovieId == MovieRatingId);
+            var existingRating = _dbContext.MovieRatings.FirstOrDefault(r => r.UsersId == UserId && r.MovieId == MovieIdFromRating);
             
 
 
@@ -67,6 +71,35 @@ namespace Movies_Database.Services
             return rating.Id;
         }
 
+        public int Update(CreateMovieRatingDto dto)
+        {
+            var rating = _mapper.Map<MovieRating>(dto);
+            rating.UsersId = (int)_userContextService.GetUserId;
+            rating.MovieId = _dbContext.Movies.FirstOrDefault(m => m.Name == dto.MovieName).Id;
+            var UserId = rating.UsersId;
+            var MovieIdFromRating = rating.MovieId;
 
+            var existingRating = _dbContext.MovieRatings.FirstOrDefault(r => r.UsersId == UserId && r.MovieId == MovieIdFromRating);
+
+
+
+
+
+            if (existingRating == null)
+            {
+                return -1;
+            }
+            existingRating.Rating = dto.Rating;
+            existingRating.IsFavorite = dto.IsFavorite;
+
+
+            _dbContext.MovieRatings.Add(rating);
+
+            _dbContext.SaveChanges();
+
+            return rating.Id;
+        }
+
+        
     }
 }

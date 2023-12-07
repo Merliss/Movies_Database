@@ -28,13 +28,12 @@ namespace Movies_Database.Controllers
             return Ok(ratings);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         
-        public ActionResult CreateMovie([FromBody] CreateMovieRatingDto dto)
+        public ActionResult CreateMovieRating([FromBody] CreateMovieRatingDto dto)
         {
-            var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            var id = _movieRatingService.Create(dto,userId);
-           
+            //var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
+            var id = _movieRatingService.Create(dto);
 
             if (id == -1)
             {
@@ -44,6 +43,21 @@ namespace Movies_Database.Controllers
 
 
             return Created($"/api/movie/{id}", null);
+
+        }
+
+
+        [HttpPost("update")]
+        public ActionResult UpdateMovieRating([FromBody] CreateMovieRatingDto dto)
+        {
+            var id = _movieRatingService.Update(dto);
+
+            if(id == -1)
+            {
+                return BadRequest(dto.MovieName);
+            }
+            return Created($"/api/movie/{id}", null);
+
 
         }
     }
