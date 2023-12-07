@@ -38,11 +38,19 @@ builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator
 builder.Services.AddScoped<IValidator<CreateMovieDto>, CreateMovieDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateMovieRatingDto>, CreateMovieRatingDtoValidator>();
 builder.Services.AddScoped<IAuthorizationHandler,ResourceOperationsRequirementHandler>();
+builder.Services.AddScoped<IAuthorizationHandler,CreatedMultipleRatingsRequirementHandler>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthorization(
+    options => {
+
+        options.AddPolicy("CreatedAtLeast2Ratings", builder => builder.AddRequirements(new CreatedMultipleRatingsRequirement(2)));
+        
+    });
+
 builder.Host.UseNLog();
 
 builder.Services.AddAuthentication(option =>
