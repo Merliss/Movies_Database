@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Movies_Database.Entities;
+using Movies_Database.Exceptions;
 using Movies_Database.Models;
 
 namespace Movies_Database.Services
@@ -87,7 +88,9 @@ namespace Movies_Database.Services
 
             if (existingRating == null)
             {
-                return -1;
+                _logger.LogError($"Rating with movie name: {dto.MovieName} can't be updated. Reason: not exist");
+                throw new NotFoundException($"Movie with name: {dto.MovieName} not found");
+
             }
             existingRating.Rating = dto.Rating;
             existingRating.IsFavorite = dto.IsFavorite;
