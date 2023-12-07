@@ -37,6 +37,7 @@ builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateMovieDto>, CreateMovieDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateMovieRatingDto>, CreateMovieRatingDtoValidator>();
+builder.Services.AddScoped<IValidator<MovieQuery>, MovieQueryValidator>();
 builder.Services.AddScoped<IAuthorizationHandler,ResourceOperationsRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler,CreatedMultipleRatingsRequirementHandler>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
