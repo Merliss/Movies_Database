@@ -20,7 +20,7 @@ namespace Movies_Database.Controllers
         }
 
         [HttpGet("{id}")]
-
+        [Authorize(Policy = "CreatedAtLeast2Ratings")]
         public ActionResult<IEnumerable<MovieRatingDto>> GetAllByMovie([FromRoute] int id)
         {
             var ratings = _movieRatingService.GetAllByMovie(id);
@@ -29,8 +29,7 @@ namespace Movies_Database.Controllers
         }
 
         [HttpPost]
-        
-        public ActionResult CreateMovieRating([FromBody] CreateMovieRatingDto dto)
+        public ActionResult Create([FromBody] CreateMovieRatingDto dto)
         {
             //var userId = int.Parse(User.FindFirst(c => c.Type == ClaimTypes.NameIdentifier).Value);
             var id = _movieRatingService.Create(dto);
@@ -40,15 +39,13 @@ namespace Movies_Database.Controllers
                 return BadRequest(dto.MovieName);
             }
 
-
-
             return Created($"/api/movie/{id}", null);
 
         }
 
 
         [HttpPut]
-        public ActionResult UpdateMovieRating([FromBody] CreateMovieRatingDto dto)
+        public ActionResult Update([FromBody] CreateMovieRatingDto dto)
         {
             var id = _movieRatingService.Update(dto);
 
@@ -56,6 +53,7 @@ namespace Movies_Database.Controllers
             {
                 return BadRequest(dto.MovieName);
             }
+
             return Created($"/api/movie/{id}", null);
 
 
