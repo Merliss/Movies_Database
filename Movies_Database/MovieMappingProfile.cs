@@ -16,7 +16,7 @@ namespace Movies_Database
 
             CreateMap<MovieRating, MovieRatingDto>()
                 .ForMember(m => m.MovieName, c => c.MapFrom(s => s.Movie.Name))
-                .ForMember(m => m.UserName, c => c.MapFrom(s => s.Users.Username));
+                .ForMember(m => m.UsersId, c => c.MapFrom(s => s.Users.Id));
 
             CreateMap<Users, UserDto>();
 
