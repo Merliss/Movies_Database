@@ -31,14 +31,18 @@ builder.Services.AddScoped<IMovieRatingService,MovieRatingService>();
 builder.Services.AddScoped<IAccountService,AccountService>();
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
+builder.Services.AddScoped<IUserContextService,UserContextService>();
+
 builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateMovieDto>, CreateMovieDtoValidator>();
+builder.Services.AddScoped<IValidator<CreateMovieRatingDto>, CreateMovieRatingDtoValidator>();
 builder.Services.AddScoped<IAuthorizationHandler,ResourceOperationsRequirementHandler>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 builder.Host.UseNLog();
 
 builder.Services.AddAuthentication(option =>
