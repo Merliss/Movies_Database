@@ -10,7 +10,7 @@ namespace Movies_Database.Services
     public interface IMovieService
     {
         MovieDto GetMovieById(int id);
-        IEnumerable<MovieDto> GetAllMovies();
+        IEnumerable<MovieDto> GetAllMovies(string searchPhrase);
         int Create(CreateMovieDto dto);
         void Update(UpdateMovieDto dto, int id);
     }
@@ -47,7 +47,7 @@ namespace Movies_Database.Services
             return result;
         }
 
-        public IEnumerable<MovieDto> GetAllMovies()
+        public IEnumerable<MovieDto> GetAllMovies(string searchPhrase)
         {
             var movies = _dbContext
                 .Movies
@@ -55,6 +55,7 @@ namespace Movies_Database.Services
                 .Include(m => m.Country)
                 .Include(m => m.Genre)
                 .Include(m => m.MovieRatings)
+                .Where(m => searchPhrase == null || (m.Name.ToLower().Contains(searchPhrase) || m.Description.ToLower().Contains(searchPhrase)))
                 .ToList();
 
             
@@ -113,6 +114,7 @@ namespace Movies_Database.Services
             {
                 _logger.LogError($"Movie with id: {id} can't be updated. Reason: not exist");
                 throw new NotFoundException($"Movie with id: {id} not found");
+                
             }
 
             movie.Name = dto.Name;
