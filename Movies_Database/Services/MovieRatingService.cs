@@ -93,8 +93,6 @@ namespace Movies_Database.Services
             existingRating.IsFavorite = dto.IsFavorite;
 
 
-            _dbContext.MovieRatings.Add(rating);
-
             _dbContext.SaveChanges();
 
             return rating.Id;
