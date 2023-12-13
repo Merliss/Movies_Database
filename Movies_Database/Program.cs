@@ -29,19 +29,24 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IMovieService,MovieService>();
 builder.Services.AddScoped<IMovieRatingService,MovieRatingService>();
 builder.Services.AddScoped<IAccountService,AccountService>();
+
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
 builder.Services.AddScoped<RequestTimeMiddleware>();
+
 builder.Services.AddScoped<IUserContextService,UserContextService>();
 
 builder.Services.AddScoped<IPasswordHasher<Users>, PasswordHasher<Users>>();
+
 builder.Services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateMovieDto>, CreateMovieDtoValidator>();
 builder.Services.AddScoped<IValidator<CreateMovieRatingDto>, CreateMovieRatingDtoValidator>();
 builder.Services.AddScoped<IValidator<MovieQuery>, MovieQueryValidator>();
+
 builder.Services.AddScoped<IAuthorizationHandler,ResourceOperationsRequirementHandler>();
 builder.Services.AddScoped<IAuthorizationHandler,CreatedMultipleRatingsRequirementHandler>();
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddSingleton(authenticationSettings);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
@@ -51,8 +56,7 @@ builder.Services.AddCors(options =>
 
             builder.AllowAnyMethod()
                     .AllowAnyHeader()
-                    .WithOrigins("http://example_frontend_movie_db_api.com") //change with willing url
-
+                    .WithOrigins("http://exapmle_movie_db_front.com") //change with willing url
     ); 
 });
 builder.Services.AddAuthorization(
@@ -83,7 +87,6 @@ builder.Services.AddAuthentication(option =>
 });
 
 
-
 var app = builder.Build();
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<MovieSeeder>();
@@ -99,7 +102,7 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseMiddleware<RequestTimeMiddleware>();
 
 app.UseAuthentication();
-
+app.UseCors("FrontendClient");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
