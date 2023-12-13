@@ -16,19 +16,23 @@ namespace Movies_Database.Services
     {
         void RegisterUser(RegisterUserDto dto);
         string GenerateJwt(LoginDto dto);
+
+        bool Delete(DeleteUserDto userDto);
     }
     public class AccountService : IAccountService
     {
         private readonly MovieDbContext _context;
         private readonly IPasswordHasher<Users> _passwordHasher;
         private readonly AuthenticationSettings _authenticationSettings;
+        private readonly MovieDbContext _movieDbContext;
 
-        public AccountService(MovieDbContext context, IPasswordHasher<Users> passwordHasher, AuthenticationSettings authenticationSettings)
+        public AccountService(MovieDbContext context, IPasswordHasher<Users> passwordHasher, AuthenticationSettings authenticationSettings, MovieDbContext movieDbContext)
         {
 
             _context = context;
             _passwordHasher = passwordHasher;
             _authenticationSettings = authenticationSettings;
+            _movieDbContext = movieDbContext;
 
         }
         public void RegisterUser(RegisterUserDto dto)
@@ -91,6 +95,22 @@ namespace Movies_Database.Services
             return tokenHandler.WriteToken(token);
         }
 
+        public bool Delete(DeleteUserDto userDto)
+        {
+            var user = _movieDbContext
+                .Users
+                .FirstOrDefault(u => u.Id == userDto.UserId && u.Username == userDto.UserName && u.Email == userDto.UserEmail && u.RoleId == userDto.RoleId);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            _movieDbContext.Users.Remove(user);
+            _movieDbContext.SaveChanges();
+            return true;
+
+        }
 
     }
 }
