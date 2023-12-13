@@ -45,6 +45,16 @@ builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendClient", builder =>
+
+            builder.AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithOrigins("http://example_frontend_movie_db_api.com") //change with willing url
+
+    ); 
+});
 builder.Services.AddAuthorization(
     options => {
 
