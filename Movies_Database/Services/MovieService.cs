@@ -14,6 +14,8 @@ namespace Movies_Database.Services
         PagedResult<MovieDto> GetAllMovies(MovieQuery query);
         int Create(CreateMovieDto dto);
         void Update(UpdateMovieDto dto, int id);
+
+        bool Delete(int id);
     }
     public class MovieService : IMovieService
     {
@@ -149,6 +151,20 @@ namespace Movies_Database.Services
             
             _dbContext.SaveChanges();
             
+        }
+
+        public bool Delete(int id)
+        {
+            var movie = _dbContext.Movies.FirstOrDefault(x => x.Id == id);
+
+            if (movie == null)
+            {
+                return false;
+            }
+
+            _dbContext.Remove(movie);
+            _dbContext.SaveChanges();
+            return true;
         }
 
 

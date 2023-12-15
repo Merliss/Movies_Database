@@ -44,7 +44,7 @@ namespace Movies_Database.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,Moderator")]
-        public ActionResult CreateMovie([FromBody] CreateMovieDto dto)
+        public ActionResult Create([FromBody] CreateMovieDto dto)
         {
             
             var id = _movieService.Create(dto);
@@ -62,7 +62,7 @@ namespace Movies_Database.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin,Moderator")]
-        public ActionResult UpdateMovie([FromBody] UpdateMovieDto dto, [FromRoute] int id)
+        public ActionResult Update([FromBody] UpdateMovieDto dto, [FromRoute] int id)
 
         {
             
@@ -70,6 +70,19 @@ namespace Movies_Database.Controllers
 
             return Ok();
 
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var isDeleted = _movieService.Delete(id);
+            if (!isDeleted)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
 
     }
