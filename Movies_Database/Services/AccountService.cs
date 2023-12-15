@@ -42,7 +42,7 @@ namespace Movies_Database.Services
             {
                 Email = dto.Email,
                 Username = dto.Username,
-                RoleId = dto.RoleId
+                RoleId = 2 // default user
             };
 
 
