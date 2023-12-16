@@ -55,8 +55,18 @@ namespace Movies_Database.Controllers
             }
 
             return Created($"/api/movie/{id}", null);
+        }
 
+        [HttpDelete]
+        public ActionResult ActionResult([FromRoute] int id)
+        {
+            var result = _movieRatingService.Delete(id);
 
+            if (result == false)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }

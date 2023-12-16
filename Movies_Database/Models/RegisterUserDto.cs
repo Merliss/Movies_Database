@@ -14,6 +14,7 @@ namespace Movies_Database.Models
         
         public string Username { get; set; }
 
+        public int RoleId { get; set; } = 2; //User Role default
     }
 }
 

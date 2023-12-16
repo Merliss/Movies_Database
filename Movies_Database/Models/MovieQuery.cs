@@ -2,9 +2,6 @@
 {
     public class MovieQuery
     {
-
-
-
         public int PageNumber { get; set; }
 
         public string SearchPhrase { get; set; }

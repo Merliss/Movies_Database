@@ -16,8 +16,8 @@ namespace Movies_Database.Services
     {
         IEnumerable<MovieRatingDto> GetAllByMovie(int movieId);
         int Create(CreateMovieRatingDto ratingDto);
-
         int Update(CreateMovieRatingDto dto);
+        bool Delete(int id);
     }
     public class MovieRatingService : IMovieRatingService
     {
@@ -62,8 +62,6 @@ namespace Movies_Database.Services
 
             var existingRating = _dbContext.MovieRatings.FirstOrDefault(r => r.UsersId == UserId && r.MovieId == MovieIdFromRating);
             
-
-
             
 
             if (existingRating != null)
@@ -89,16 +87,12 @@ namespace Movies_Database.Services
             var MovieIdFromRating = rating.MovieId;
             var existingRating = _dbContext.MovieRatings.FirstOrDefault(r => r.UsersId == UserId && r.MovieId == MovieIdFromRating);
 
-            var authoriztionResult = _authorizationService.AuthorizeAsync(_userContextService.User, existingRating, new ResourceOperationsRequirement(ResourceOperation.Update)).Result;
+            var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, existingRating, new ResourceOperationsRequirement(ResourceOperation.Update)).Result;
            
-            if (!authoriztionResult.Succeeded)
+            if (!authorizationResult.Succeeded)
             {
                 throw new ForbidException();
             }
-
-
-
-
 
 
             if (existingRating == null)
@@ -110,12 +104,40 @@ namespace Movies_Database.Services
             existingRating.Rating = dto.Rating;
             existingRating.IsFavorite = dto.IsFavorite;
 
-
             _dbContext.SaveChanges();
 
             return rating.Id;
         }
 
+
+        public bool Delete(int id)
+        {
+            var rating = _dbContext.MovieRatings.FirstOrDefault(mr => mr.Id == id);
+
+            var authorizationResult = _authorizationService.AuthorizeAsync(_userContextService.User, rating, new ResourceOperationsRequirement(ResourceOperation.Delete)).Result;
+
+            if (!authorizationResult.Succeeded)
+            {
+                throw new ForbidException();
+            }
+
+            if (rating == null)
+            {
+                _logger.LogError($"Rating with movie name: {id} can't be updated. Reason: not exist");
+                throw new NotFoundException($"Rating with: {id} not found");
+            }
+
+            if ( rating != null && authorizationResult.Succeeded) 
+            {
+                _dbContext.Remove(rating);
+                _dbContext.SaveChanges();
+
+                return true;
+            }
+            
+            return false;
+
+        }
         
     }
 }
