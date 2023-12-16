@@ -115,7 +115,8 @@ namespace Movies_Database.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("WebApiDatabase"));
+            //optionsBuilder.UseNpgsql(_configuration.GetConnectionString("WebApiDatabase"));
+            optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("WebApiDatabase"));
         }
 
 
