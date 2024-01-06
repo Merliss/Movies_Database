@@ -1,0 +1,44 @@
+version: '3.4'
+
+networks:
+  dev:
+    driver: bridge
+
+services:
+  movies_database:
+    image: ${DOCKER_REGISTRY-}moviesdatabase
+    depends_on:
+        - "movies_database1"
+    container_name: movies_service
+    ports:
+        - "5009:80"
+        - "5010:443"
+    build:
+      context: .
+      dockerfile: Movies_Database/Dockerfile
+    environment:
+       - ConnectionStrings__WebApiDatabase=Server=movies_database_postgres;port=5432;Database=movie_db;Username=postgres;Password=postgres;Pooling=true;
+    networks:
+       - dev
+    volumes:
+       - /home/merliss/api/Movies_Database/https/aspnetapp.pfx:/https/aspnetapp.pfx
+  
+  movies_database_postgres:
+    image: postgres:latest
+    container_name: movies_database_postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=movie_db
+    ports:
+      - "5438:5432"
+    restart: always
+    volumes:
+      - movies_data:/var/lib/postgres/data/
+    networks:
+      - dev
+
+volumes:
+  movies_data:
+   
+
