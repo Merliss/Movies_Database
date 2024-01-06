@@ -18,3 +18,11 @@ dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 6.0.2
 dotnet add package NLog.Web.AspNetCore --version 5.3.5
 ```
 This should add packages if they weren't add before in the container build process.
+
+Another important case is https certificate on Linux machine. In my case (Ubuntu 20.04) you need to generate certificate and add it to the /https folder in main directory of project (where the docker-compose.yaml file is).
+You must run these commands in your project directory:
+```
+dotnet dev-certs https -ep ${HOME}/.aspnet/https/aspnetapp.pfx -p <CREDENTIAL_PLACEHOLDER>
+dotnet dev-certs https --trust
+```
+Then copy this .pfx certificate to https folder you created. The command in Dockerfile will copy this file to suitable directory in container.
