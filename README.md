@@ -26,3 +26,13 @@ dotnet dev-certs https -ep ${HOME}/.aspnet/https/aspnetapp.pfx -p <CREDENTIAL_PL
 dotnet dev-certs https --trust
 ```
 Then copy this .pfx certificate to https folder you created. The command in Dockerfile will copy this file to suitable directory in container.
+
+The  database update must be prepared by user (to fill the database). You need to change settings in code that connect to database (MovieDbContext class, commented line of code) by using local appsetings.json file and run:
+```
+dotnet eff database update
+```
+Then revert back the changes in MovieDbContext and start containers by:
+```
+docker-compose up
+```
+
