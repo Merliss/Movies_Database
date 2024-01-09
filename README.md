@@ -36,3 +36,6 @@ Then revert back the changes in MovieDbContext and start containers by:
 docker-compose up
 ```
 
+Database schema:
+![obraz](https://github.com/Merliss/Movies_Database/assets/62032793/9d747ad8-a00e-4f99-9b3a-21236bbc32d7)
+
