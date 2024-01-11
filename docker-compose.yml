@@ -20,7 +20,8 @@ services:
        - ConnectionStrings__WebApiDatabase=Server=movies_database_postgres;port=5432;Database=movie_db;Username=postgres;Password=postgres;Pooling=true;
     networks:
        - dev
-
+    volumes:
+       - /home/merliss/api/Movies_Database/https/aspnetapp.pfx:/https/aspnetapp.pfx
   
   movies_database_postgres:
     image: postgres:latest

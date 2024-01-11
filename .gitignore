@@ -362,5 +362,3 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Movies_Database/appsettings.json
-/Movies_Database/appsettings.json
-/Movies_Database/Dockerfile
