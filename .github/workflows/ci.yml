@@ -1,0 +1,23 @@
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - name: Setup .NET Enviroment
+        uses: actions/setup-dotnet@v4.0.0
+        with:
+          dotnet-version: 6.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: build
+        run: dotnet build --no-restore
+      #- name: Tests
+        #run: dotnet test
