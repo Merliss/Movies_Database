@@ -61,14 +61,14 @@ namespace Movies_Database.Services
 
             if (user == null)
             {
-                throw new BadRequestException("Invalid data (username or password)");
+                throw new BadRequestException("Invalid data from user (username or password)");
             }
 
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
             if(result == PasswordVerificationResult.Failed)
             {
-                throw new BadRequestException("Invalid data (username or password)");
+                throw new BadRequestException("Invalid data from user (username or password)");
             }
 
             var claims = new List<Claim>()
