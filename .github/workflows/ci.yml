@@ -16,7 +16,7 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Movies_Database
       - name: build
         run: dotnet build --no-restore
       #- name: Tests
