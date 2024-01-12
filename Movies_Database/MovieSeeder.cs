@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore;
 using Movies_Database.Entities;
 
 namespace Movies_Database
@@ -17,8 +18,13 @@ namespace Movies_Database
             if (_dbContext.Database.CanConnect())
             {
 
-                //var movies = GetMovies();
-               
+                var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+                if (pendingMigrations != null && pendingMigrations.Any())
+                {
+                    _dbContext.Database.Migrate();
+                }
+
+
                 if (!_dbContext.Movies.Any())
                 {
                     var movies = GetMovies();
