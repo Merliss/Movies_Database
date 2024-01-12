@@ -8,7 +8,7 @@ services:
   movies_database:
     image: ${DOCKER_REGISTRY-}moviesdatabase
     depends_on:
-        - "movies_database1"
+        - "movies_database_postgres"
     container_name: movies_service
     ports:
         - "5009:80"
@@ -17,7 +17,7 @@ services:
       context: .
       dockerfile: Movies_Database/Dockerfile
     environment:
-       - ConnectionStrings__WebApiDatabase=Server=movies_database_postgres;port=5432;Database=movie_db;Username=postgres;Password=postgres;Pooling=true;
+       - WebApiDatabase=Server=movies_database_postgres;port=5432;Database=movie_db;UserId=postgres;Password=postgres;
     networks:
        - dev
     volumes:
